@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= post.title %> · The Daily Draft</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">The Daily <span>Draft</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Writing</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="post-hero">
+  <a href="/" class="back-link">← All posts</a>
+  <span class="hero-tag"><%= post.tag %></span>
+  <h1><%= post.title %></h1>
+  <div class="post-info">
+    <span class="author-name"><%= post.author %></span>
+    <span class="dot">·</span>
+    <span class="post-date"><%= post.date %></span>
+    <span class="dot">·</span>
+    <span class="post-read-time"><%= post.readTime %></span>
+  </div>
+</header>
+
+<article class="post-body">
+  <% post.content.split('\n\n').forEach(para => { %>
+    <% if (para.trim()) { %>
+      <p><%= para.trim() %></p>
+    <% } %>
+  <% }) %>
+</article>
+
+<% if (related.length > 0) { %>
+<section class="related-section">
+  <div class="related-inner">
+    <h3>More to read</h3>
+    <div class="related-grid">
+      <% related.forEach(r => { %>
+      <a href="/post/<%= r.id %>" class="related-card">
+        <span class="post-tag" style="font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);font-weight:500;"><%= r.tag %></span>
+        <h4><%= r.title %></h4>
+        <p><%= r.excerpt.substring(0, 90) %>...</p>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<footer>
+  <p>© 2026 The Daily Draft · Written with care</p>
+</footer>
+
+</body>
+</html>

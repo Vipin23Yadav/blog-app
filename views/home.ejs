@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Daily Draft</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">The Daily <span>Draft</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Writing</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <span class="hero-tag">A Personal Blog</span>
+  <h1>Thoughts on life, technology, and everything in between.</h1>
+  <p>Short essays written slowly. Ideas worth sitting with. Updated whenever something is worth saying.</p>
+</header>
+
+<main class="posts-section">
+  <p class="section-label">All Posts — <%= posts.length %> essays</p>
+  <div class="posts-grid">
+    <% posts.forEach(post => { %>
+    <a href="/post/<%= post.id %>" class="post-card">
+      <div>
+        <div class="post-meta">
+          <span class="post-tag"><%= post.tag %></span>
+          <span class="post-date"><%= post.date %></span>
+        </div>
+        <h2><%= post.title %></h2>
+        <p class="post-excerpt"><%= post.excerpt %></p>
+      </div>
+      <span class="post-read-time"><%= post.readTime %></span>
+    </a>
+    <% }) %>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 The Daily Draft · Written with care</p>
+</footer>
+
+</body>
+</html>

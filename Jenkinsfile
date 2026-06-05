@@ -1,3 +1,5 @@
+cd /Users/vipinyadav/blog-app
+cat > Jenkinsfile << 'EOF'
 pipeline {
     agent any
 
@@ -6,6 +8,7 @@ pipeline {
             steps {
                 echo 'Pulling latest code from GitHub...'
                 dir('/var/lib/jenkins/blog-app') {
+                    sh 'git reset --hard origin/main'
                     sh 'git pull origin main'
                 }
             }
@@ -23,7 +26,7 @@ pipeline {
         stage('Restart App') {
             steps {
                 echo 'Restarting app with PM2...'
-                sh '/usr/local/bin/pm2 restart index || /usr/local/bin/pm2 start /var/lib/jenkins/blog-app/index.js --name index'
+                sh '/usr/bin/pm2 restart index || /usr/bin/pm2 start /var/lib/jenkins/blog-app/index.js --name index'
             }
         }
     }
@@ -37,3 +40,4 @@ pipeline {
         }
     }
 }
+EOF

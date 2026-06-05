@@ -5,7 +5,7 @@ pipeline {
         stage('Pull Code') {
             steps {
                 echo 'Pulling latest code from GitHub...'
-                dir('/home/ec2-user/blog-app') {
+                dir('/var/lib/jenkins/blog-app') {
                     sh 'git pull origin main'
                 }
             }
@@ -14,7 +14,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                dir('/home/ec2-user/blog-app') {
+                dir('/var/lib/jenkins/blog-app') {
                     sh 'npm install'
                 }
             }
@@ -23,7 +23,7 @@ pipeline {
         stage('Restart App') {
             steps {
                 echo 'Restarting app with PM2...'
-                sh 'sudo /usr/local/bin/pm2 restart index || sudo /usr/local/bin/pm2 start /home/ec2-user/blog-app/index.js --name index'
+                sh '/usr/local/bin/pm2 restart index || /usr/local/bin/pm2 start /var/lib/jenkins/blog-app/index.js --name index'
             }
         }
     }

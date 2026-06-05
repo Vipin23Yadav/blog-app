@@ -16,10 +16,12 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps {
-                sh 'pm2 restart index || pm2 start index.js'
-            }
-        }
+    steps {
+        sh '''
+        /usr/bin/pm2 restart index || /usr/bin/pm2 start index.js --name index
+        '''
+    }
+}
     }
 
     post {

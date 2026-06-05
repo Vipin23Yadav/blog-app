@@ -2,26 +2,30 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone') {
+        stage('Pull Code') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/Vipin23Yadav/blog-app.git'
+                echo 'Pulling latest code from GitHub...'
+                dir('/home/ec2-user/blog-app') {
+                    sh 'git pull origin main'
+                }
             }
         }
 
-        stage('Install') {
+        stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                echo 'Installing dependencies...'
+                dir('/home/ec2-user/blog-app') {
+                    sh 'npm install'
+                }
             }
         }
 
-        stage('Deploy') {
-    steps {
-        sh '''
-        /usr/bin/pm2 restart index || /usr/bin/pm2 start index.js --name index
-        '''
-    }
-}
+        stage('Restart App') {
+            steps {
+                echo 'Restarting app with PM2...'
+                sh 'sudo /usr/local/bin/pm2 restart index || sudo /usr/local/bin/pm2 start /home/ec2-user/blog-app/index.js --name index'
+            }
+        }
     }
 
     post {

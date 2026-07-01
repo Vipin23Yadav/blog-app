@@ -2,39 +2,43 @@ pipeline {
     agent any
 
     stages {
-        stage('Pull Code') {
+        stage('Clone Code') {
             steps {
-                echo 'Pulling latest code from GitHub...'
-                dir('/var/lib/jenkins/blog-app') {
-                    sh 'git reset --hard origin/main'
-                    sh 'git pull origin main'
-                }
+                echo 'Cloning latest code from GitHub...'
+                git branch: 'main',
+                    url: 'https://github.com/Vipin23Yadav/blog-app.git'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Installing dependencies...'
-                dir('/var/lib/jenkins/blog-app') {
-                    sh 'npm install'
-                }
+                echo 'Building Docker image...'
+                sh 'docker build -t blog-app:latest .'
             }
         }
 
-        stage('Restart App') {
+        stage('Stop Old Container') {
             steps {
-                echo 'Restarting app with PM2...'
-                sh '/usr/bin/pm2 restart index || /usr/bin/pm2 start /var/lib/jenkins/blog-app/index.js --name index'
+                echo 'Stopping old container if running...'
+                sh 'docker stop blog-app || true'
+                sh 'docker rm blog-app || true'
+            }
+        }
+
+        stage('Run New Container') {
+            steps {
+                echo 'Starting new container...'
+                sh 'docker run -d --name blog-app -p 3000:3000 blog-app:latest'
             }
         }
     }
 
     post {
         success {
-            echo 'Deployment successful!'
+            echo 'Deployment successful! 🎉'
         }
         failure {
-            echo 'Deployment failed!'
+            echo 'Deployment failed! ❌'
         }
     }
 }
